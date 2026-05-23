@@ -1,0 +1,2004 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Policy Pen — Legal Architecture for SaaS</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --primary: #0052CC;
+  --primary-dark: #003d9b;
+  --primary-container: #deebff;
+  --on-primary: #ffffff;
+  --secondary: #434654;
+  --surface: #faf8ff;
+  --surface-low: #f3f3fd;
+  --surface-container: #eae9f2;
+  --surface-high: #e1e2ec;
+  --surface-highest: #d6d7e1;
+  --surface-lowest: #ffffff;
+  --on-surface: #191b23;
+  --on-surface-variant: #434654;
+  --outline: #737685;
+  --outline-variant: #c3c6d6;
+  --tertiary: #006644;
+  --tertiary-container: #c8f5e0;
+  --error: #ba1a1a;
+  --gradient-primary: linear-gradient(135deg, #003d9b 0%, #0052CC 60%, #1a6fe8 100%);
+  --shadow-float: 0 12px 40px rgba(25,27,35,0.08);
+  --shadow-card: 0 4px 20px rgba(25,27,35,0.04);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+  --topnav-bg: rgba(250,248,255,0.82);
+  --stepper-bg: rgba(250,248,255,0.88);
+  color-scheme: light;
+}
+
+html.dark {
+  /* ── Midnight Black ── */
+  --primary: #4da3ff;
+  --primary-dark: #2979d9;
+  --primary-container: #001533;
+  --on-primary: #ffffff;
+  --secondary: #8b8fa8;
+  --surface: #080808;
+  --surface-low: #101010;
+  --surface-container: #171717;
+  --surface-high: #1f1f1f;
+  --surface-highest: #282828;
+  --surface-lowest: #000000;
+  --on-surface: #f0f0f0;
+  --on-surface-variant: #8b8fa8;
+  --outline: #444444;
+  --outline-variant: #232323;
+  --tertiary: #34d994;
+  --tertiary-container: #041a10;
+  --gradient-primary: linear-gradient(135deg, #003399 0%, #0052CC 55%, #1a70f0 100%);
+  --shadow-float: 0 12px 48px rgba(0,0,0,0.7);
+  --shadow-card: 0 4px 24px rgba(0,0,0,0.5);
+  --topnav-bg: rgba(8,8,8,0.92);
+  --stepper-bg: rgba(0,0,0,0.95);
+  color-scheme: dark;
+}
+
+html { transition: background-color 0.3s ease; }
+body { transition: background-color 0.3s ease, color 0.3s ease; }
+
+/* Theme toggle pill */
+.theme-toggle-wrap {
+  display: flex; align-items: center; gap: 0.4rem;
+  background: var(--surface-container);
+  border-radius: var(--radius-full);
+  padding: 0.28rem 0.55rem;
+  border: 1px solid rgba(195,198,214,0.18);
+  cursor: pointer; user-select: none;
+  transition: background 0.3s !important;
+}
+.theme-toggle-track {
+  width: 36px; height: 20px;
+  background: var(--surface-high);
+  border-radius: var(--radius-full);
+  position: relative;
+  transition: background 0.3s !important;
+  flex-shrink: 0;
+}
+.theme-toggle-thumb {
+  position: absolute;
+  width: 14px; height: 14px;
+  background: var(--outline);
+  border-radius: 50%;
+  top: 3px; left: 3px;
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), background 0.3s !important;
+}
+html.dark .theme-toggle-track { background: #2979d9; }
+html.dark .theme-toggle-thumb { background: #fff; transform: translateX(16px); }
+.theme-icon {
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+  font-size: 0.9rem; line-height: 1;
+  color: var(--outline); pointer-events: none;
+  transition: color 0.3s !important;
+}
+.theme-icon-sun { display: block; }
+.theme-icon-moon { display: none; }
+html.dark .theme-icon-sun { display: none; }
+html.dark .theme-icon-moon { display: block; }
+
+/* Dark mode component overrides — Midnight Black */
+html.dark .hero-card {
+  box-shadow: 0 24px 64px rgba(0,0,0,0.75);
+  border-color: rgba(255,255,255,0.05);
+}
+html.dark .hero-badge {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+  border-color: rgba(255,255,255,0.05);
+}
+html.dark .quest-card {
+  box-shadow: 0 20px 60px rgba(0,0,0,0.65);
+  border-color: rgba(255,255,255,0.04);
+}
+html.dark .policy-doc {
+  border-color: rgba(255,255,255,0.04);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+}
+html.dark .health-card { box-shadow: var(--shadow-card); border: 1px solid rgba(255,255,255,0.04); }
+html.dark .audit-card { box-shadow: 0 8px 40px rgba(0,82,204,0.35); }
+html.dark .policy-item {
+  box-shadow: var(--shadow-card);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+html.dark .policy-item:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.6); }
+html.dark .editor-panel { background: var(--surface-low); border: 1px solid rgba(255,255,255,0.04); }
+html.dark .legal-guide-panel { background: rgba(77,163,255,0.07); border: 1px solid rgba(77,163,255,0.1); }
+html.dark .checkbox-row-item,
+html.dark .checkbox-item { background: var(--surface-container); border: 1px solid rgba(255,255,255,0.04); }
+html.dark .checkbox-row-item:hover,
+html.dark .checkbox-item:hover { background: var(--surface-high); }
+html.dark .form-input,
+html.dark .form-textarea,
+html.dark .form-select {
+  background: transparent;
+  color: var(--on-surface);
+  border-color: rgba(255,255,255,0.1);
+}
+html.dark .form-input:focus,
+html.dark .form-textarea:focus { border-color: var(--primary); }
+html.dark .quick-edit-select {
+  background: var(--surface-container);
+  color: var(--on-surface);
+  box-shadow: none;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+html.dark .step-card { background: var(--surface-low); }
+html.dark .step-card:hover { background: var(--surface-container); }
+html.dark .ms-pill { border-color: rgba(255,255,255,0.1); color: var(--on-surface-variant); }
+html.dark .ms-pill:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-container); }
+html.dark .ms-pill.selected { border-color: var(--primary); color: var(--primary); background: var(--primary-container); }
+html.dark .hero-card-line { background: var(--surface-container); }
+html.dark .hero-card-text { background: var(--surface-container); border-left-color: var(--primary); }
+html.dark #dpdp-section { background: rgba(255,107,0,0.06) !important; border-left-color: #cc5500 !important; }
+html.dark .bento-1 { background: var(--surface-low); border: 1px solid rgba(255,255,255,0.04); }
+html.dark .bento-4 { background: var(--surface-low); border: 1px solid rgba(255,255,255,0.04); }
+html.dark .sidebar { background: var(--surface-lowest); border-right: 1px solid rgba(255,255,255,0.05); }
+html.dark .sidebar-nav a:hover { background: var(--surface-container); }
+html.dark .sidebar-nav a.active { background: var(--surface-high); box-shadow: none; }
+html.dark .dash-content .health-card { background: var(--surface-low); }
+html.dark .trusted { background: var(--surface-lowest); }
+html.dark .benefits-bg { background: var(--surface-lowest); }
+html.dark .footer { background: var(--surface-lowest); }
+html.dark .btn-ghost { color: var(--on-surface-variant); }
+html.dark .btn-ghost:hover { background: var(--surface-high); }
+html.dark .btn-editor { background: var(--surface-container); border-color: rgba(255,255,255,0.07); color: var(--on-surface-variant); }
+html.dark .btn-editor:hover { background: var(--surface-high); }
+html.dark .btn-action { background: var(--surface-container); color: var(--on-surface-variant); }
+html.dark .btn-action:hover { background: var(--surface-high); }
+html.dark .editor-toolbar { background: var(--surface-low); box-shadow: 0 1px 0 rgba(255,255,255,0.05); }
+html.dark .dash-topbar { box-shadow: 0 1px 0 rgba(255,255,255,0.05); }
+html.dark .floating-stepper { box-shadow: 0 8px 32px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.07); }
+html.dark .theme-toggle-wrap { background: var(--surface-high); border-color: rgba(255,255,255,0.07); }
+html.dark .format-tag { background: var(--surface-high); color: var(--on-surface-variant); }
+html.dark .section-counter { color: var(--surface-high); }
+html.dark .hero-card-dots span:nth-child(1) { background: rgba(255,100,100,0.3); }
+html.dark .hero-card-dots span:nth-child(2) { background: rgba(77,163,255,0.3); }
+html.dark .hero-card-dots span:nth-child(3) { background: rgba(255,255,255,0.1); }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Manrope', sans-serif;
+  background: var(--surface);
+  color: var(--on-surface);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.serif { font-family: 'Newsreader', serif; }
+.serif-italic { font-family: 'Newsreader', serif; font-style: italic; }
+.label { font-family: 'Manrope', sans-serif; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  font-family: 'Material Symbols Outlined';
+  font-style: normal;
+  line-height: 1;
+  display: inline-block;
+  user-select: none;
+}
+.fill-icon { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+
+/* ───────── PAGES ───────── */
+.page { display: none; min-height: 100vh; }
+.page.active { display: block; }
+
+/* ───────── NAV ───────── */
+.topnav {
+  position: fixed; top: 0; width: 100%; z-index: 100;
+  background: var(--topnav-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-float);
+}
+.topnav-inner {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0 2.5rem; height: 64px; max-width: 1280px; margin: 0 auto;
+  gap: 1rem;
+}
+.brand { font-size: 1.4rem; font-weight: 900; letter-spacing: -0.03em; color: var(--on-surface); cursor: pointer; justify-self: start; white-space: nowrap; }
+.brand:hover { color: var(--primary); }
+.nav-links { display: flex; gap: 2.5rem; justify-self: center; }
+.nav-links a { font-size: 0.85rem; font-weight: 600; color: var(--on-surface-variant); text-decoration: none; transition: color 0.2s; cursor: pointer; white-space: nowrap; }
+.nav-links a:hover { color: var(--primary); }
+.nav-actions { justify-self: end; display: flex; gap: 0.75rem; align-items: center; }
+.btn-ghost { background: none; border: none; padding: 0.5rem 1rem; font-family: 'Manrope', sans-serif; font-size: 0.85rem; font-weight: 600; color: var(--on-surface-variant); cursor: pointer; border-radius: var(--radius-md); transition: background 0.2s; }
+.btn-ghost:hover { background: var(--surface-low); }
+.btn-primary {
+  background: var(--gradient-primary);
+  border: none; color: #fff;
+  padding: 0.55rem 1.4rem;
+  font-family: 'Manrope', sans-serif; font-size: 0.85rem; font-weight: 700;
+  border-radius: var(--radius-md); cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,82,204,0.25);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,82,204,0.3); }
+.btn-primary:active { transform: scale(0.97); }
+
+/* ───────── FLOATING STEPPER ───────── */
+.floating-stepper {
+  position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  z-index: 99;
+  background: var(--stepper-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: var(--radius-full);
+  padding: 0.4rem 0.5rem;
+  display: flex; gap: 0.25rem; align-items: center;
+  box-shadow: 0 8px 32px rgba(25,27,35,0.12), 0 0 0 1px rgba(195,198,214,0.2);
+}
+.step-pill {
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-full);
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--outline); cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.step-pill:hover { background: var(--surface-container); color: var(--on-surface); }
+.step-pill.active {
+  background: var(--gradient-primary);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(0,82,204,0.3);
+}
+.step-pill .material-symbols-outlined { font-size: 1rem; }
+
+/* ───────── FOOTER ───────── */
+.footer {
+  background: var(--surface-low);
+  padding: 3rem 2.5rem;
+  margin-top: 5rem;
+}
+.footer-inner {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;
+}
+.footer-brand { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.02em; }
+.footer-links { display: flex; gap: 2rem; }
+.footer-links a { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--on-surface-variant); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--primary); }
+.footer-copy { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--outline); }
+
+/* ═══════════════════════════════
+   PAGE 1: LANDING
+═══════════════════════════════ */
+#page-landing { padding-top: 64px; }
+
+/* Hero */
+.hero {
+  max-width: 1280px; margin: 0 auto;
+  padding: 6rem 2.5rem 5rem;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: var(--primary-container); color: var(--primary);
+  padding: 0.3rem 0.8rem; border-radius: var(--radius-full);
+  font-size: 0.65rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.hero-eyebrow .material-symbols-outlined { font-size: 0.85rem; font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 20; }
+.hero-h1 {
+  font-size: clamp(3rem, 5vw, 4.5rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  color: var(--on-surface);
+  margin-bottom: 1.5rem;
+}
+.hero-h1 em { font-family: 'Newsreader', serif; font-style: italic; font-weight: 400; }
+.hero-sub {
+  font-size: 1.1rem; line-height: 1.7;
+  color: var(--on-surface-variant);
+  font-family: 'Newsreader', serif;
+  max-width: 480px;
+  margin-bottom: 2.5rem;
+}
+.hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn-primary-lg {
+  background: var(--gradient-primary);
+  border: none; color: #fff;
+  padding: 1rem 2rem;
+  font-family: 'Manrope', sans-serif; font-size: 1rem; font-weight: 700;
+  border-radius: var(--radius-md); cursor: pointer;
+  box-shadow: 0 8px 28px rgba(0,82,204,0.28);
+  transition: transform 0.15s, box-shadow 0.15s;
+  letter-spacing: -0.01em;
+}
+.btn-primary-lg:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(0,82,204,0.36); }
+.btn-primary-lg:active { transform: scale(0.97); }
+.btn-text-lg {
+  background: none; border: none;
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  font-family: 'Manrope', sans-serif; font-size: 1rem; font-weight: 700;
+  color: var(--primary); cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: background 0.2s;
+}
+.btn-text-lg:hover { background: var(--primary-container); }
+
+/* Hero visual */
+.hero-visual { position: relative; }
+.hero-card {
+  background: var(--surface-lowest);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  box-shadow: 0 24px 64px rgba(25,27,35,0.10);
+  transform: rotate(2deg);
+  position: relative; z-index: 2;
+  border: 1px solid rgba(195,198,214,0.15);
+}
+.hero-card-dots { display: flex; gap: 0.4rem; margin-bottom: 1.5rem; }
+.hero-card-dots span { width: 10px; height: 10px; border-radius: 50%; }
+.hero-card-lines { display: flex; flex-direction: column; gap: 0.75rem; }
+.hero-card-line { height: 10px; background: var(--surface-container); border-radius: 4px; }
+.hero-card-text {
+  background: var(--surface-low);
+  border-left: 3px solid var(--primary);
+  padding: 1rem 1.25rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin: 1rem 0;
+  font-family: 'Newsreader', serif;
+  font-size: 0.85rem;
+  color: var(--on-surface-variant);
+  font-style: italic;
+  line-height: 1.6;
+}
+.hero-badge {
+  position: absolute;
+  bottom: -1.5rem; left: -2rem;
+  background: var(--surface-lowest);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem;
+  box-shadow: 0 8px 32px rgba(25,27,35,0.12);
+  display: flex; align-items: center; gap: 0.75rem;
+  z-index: 3;
+  border: 1px solid rgba(195,198,214,0.12);
+}
+.hero-badge-icon {
+  width: 36px; height: 36px;
+  background: var(--tertiary-container);
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--tertiary);
+}
+.hero-badge-icon .material-symbols-outlined { font-size: 1.1rem; font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 20; }
+.hero-badge-title { font-size: 0.8rem; font-weight: 700; color: var(--on-surface); }
+.hero-badge-sub { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--outline); }
+.hero-bg-blob {
+  position: absolute; top: -60px; right: -60px;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(0,82,204,0.06) 0%, transparent 70%);
+  border-radius: 50%; pointer-events: none;
+}
+
+/* Trusted by */
+.trusted {
+  background: var(--surface-low);
+  padding: 3rem 2.5rem;
+}
+.trusted-inner { max-width: 1280px; margin: 0 auto; text-align: center; }
+.trusted-label { color: var(--outline); margin-bottom: 2rem; }
+.trusted-logos { display: flex; justify-content: center; align-items: center; gap: 3rem; flex-wrap: wrap; opacity: 0.4; filter: grayscale(1); }
+.trusted-logos span { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.02em; color: var(--on-surface); }
+
+/* How it works */
+.section { max-width: 1280px; margin: 0 auto; padding: 6rem 2.5rem; }
+.section-eyebrow { margin-bottom: 5rem; }
+.section-eyebrow-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; }
+.section-h2 { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.15; margin-bottom: 0.75rem; }
+.section-h2 em { font-family: 'Newsreader', serif; font-style: italic; font-weight: 400; }
+.section-sub { font-size: 1.05rem; font-family: 'Newsreader', serif; color: var(--on-surface-variant); max-width: 500px; }
+.section-counter { font-size: 4rem; font-weight: 900; letter-spacing: -0.05em; color: var(--surface-high); user-select: none; }
+
+.steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.step-card {
+  padding: 2.5rem;
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  transition: background 0.3s, transform 0.2s;
+  cursor: default;
+}
+.step-card:hover { background: var(--surface-low); transform: translateY(-4px); }
+.step-icon {
+  width: 48px; height: 48px;
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 2rem;
+  transition: transform 0.2s;
+}
+.step-card:hover .step-icon { transform: scale(1.1); }
+.step-icon.blue { background: var(--primary-container); color: var(--primary); }
+.step-icon.teal { background: var(--tertiary-container); color: var(--tertiary); }
+.step-icon .material-symbols-outlined { font-size: 1.4rem; }
+.step-title { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+.step-desc { font-size: 0.95rem; font-family: 'Newsreader', serif; color: var(--on-surface-variant); line-height: 1.7; }
+
+/* Benefits bento */
+.benefits-bg { background: var(--surface-low); padding: 6rem 0; }
+.bento-grid { display: grid; grid-template-columns: repeat(12, 1fr); grid-auto-rows: 280px; gap: 1.25rem; }
+.bento-1 {
+  grid-column: span 8;
+  background: var(--surface-lowest);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  position: relative; overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.3s;
+}
+.bento-1:hover { box-shadow: var(--shadow-float); }
+.bento-1-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(0,82,204,0.04) 0%, transparent 60%);
+}
+.bento-1-icon { font-size: 5rem; position: absolute; top: 1.5rem; right: 1.5rem; color: var(--primary); opacity: 0.08; font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; transition: opacity 0.3s; }
+.bento-1:hover .bento-1-icon { opacity: 0.14; }
+.bento-1-content { position: relative; z-index: 1; }
+.bento-1-content .material-symbols-outlined { font-size: 2rem; color: var(--primary); margin-bottom: 1rem; font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+.bento-2 {
+  grid-column: span 4;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem;
+  display: flex; flex-direction: column; justify-content: space-between;
+  color: #fff;
+  box-shadow: 0 8px 32px rgba(0,82,204,0.25);
+  transition: transform 0.2s;
+}
+.bento-2:hover { transform: translateY(-4px); }
+.bento-2-icon {
+  width: 40px; height: 40px; border-radius: var(--radius-md);
+  background: rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+}
+.bento-2-icon .material-symbols-outlined { font-size: 1.2rem; color: #fff; }
+.bento-3 {
+  grid-column: span 4;
+  background: var(--tertiary);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem;
+  display: flex; flex-direction: column; justify-content: space-between;
+  color: #fff;
+  transition: transform 0.2s;
+}
+.bento-3:hover { transform: translateY(-4px); }
+.bento-4 {
+  grid-column: span 8;
+  background: var(--surface-lowest);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem;
+  display: flex; align-items: center; gap: 3rem;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.3s;
+}
+.bento-4:hover { box-shadow: var(--shadow-float); }
+.bento-h3 { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.025em; margin-bottom: 0.5rem; }
+.bento-p { font-size: 0.9rem; font-family: 'Newsreader', serif; line-height: 1.6; opacity: 0.8; }
+.format-tags { display: flex; gap: 0.5rem; margin-top: 1.25rem; }
+.format-tag { padding: 0.25rem 0.6rem; border-radius: var(--radius-sm); background: var(--surface-container); font-size: 0.7rem; font-weight: 800; letter-spacing: 0.08em; color: var(--on-surface-variant); }
+
+/* CTA Banner */
+.cta-section { padding: 6rem 2.5rem; }
+.cta-banner {
+  max-width: 1080px; margin: 0 auto;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-xl);
+  padding: 5rem 4rem;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,82,204,0.3);
+  position: relative; overflow: hidden;
+}
+.cta-banner-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.08) 0%, transparent 60%),
+              radial-gradient(circle at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+  pointer-events: none;
+}
+.cta-h2 { font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 900; letter-spacing: -0.04em; color: #fff; line-height: 1.1; margin-bottom: 1.25rem; position: relative; z-index: 1; }
+.cta-h2 em { font-family: 'Newsreader', serif; font-style: italic; font-weight: 400; }
+.cta-sub { font-size: 1.1rem; font-family: 'Newsreader', serif; color: rgba(255,255,255,0.75); margin-bottom: 2.5rem; position: relative; z-index: 1; }
+.btn-cta {
+  background: #fff; color: var(--primary);
+  border: none; padding: 1.1rem 3rem;
+  font-family: 'Manrope', sans-serif; font-size: 1.05rem; font-weight: 800;
+  letter-spacing: -0.01em;
+  border-radius: var(--radius-md); cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  transition: transform 0.15s, box-shadow 0.15s;
+  position: relative; z-index: 1;
+}
+.btn-cta:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(0,0,0,0.18); }
+.cta-note { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-top: 1.25rem; position: relative; z-index: 1; }
+
+/* ═══════════════════════════════
+   PAGE 2: QUESTIONNAIRE
+═══════════════════════════════ */
+#page-questionnaire { padding-top: 64px; background: var(--surface); }
+
+.quest-main {
+  min-height: calc(100vh - 64px);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 4rem 1.5rem 8rem;
+}
+.quest-progress-wrap { width: 100%; max-width: 640px; margin-bottom: 3rem; }
+.quest-progress-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 0.75rem; }
+.quest-progress-label { color: var(--primary); }
+.quest-progress-pct { font-family: 'Newsreader', serif; font-style: italic; font-size: 1.15rem; color: var(--on-surface-variant); }
+.progress-track { height: 4px; background: var(--surface-high); border-radius: var(--radius-full); overflow: hidden; }
+.progress-fill { height: 100%; background: var(--gradient-primary); border-radius: var(--radius-full); transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+
+.quest-card {
+  width: 100%; max-width: 640px;
+  background: var(--surface-lowest);
+  border-radius: var(--radius-xl);
+  padding: 3.5rem;
+  box-shadow: 0 20px 60px rgba(25,27,35,0.07);
+  border: 1px solid rgba(195,198,214,0.1);
+}
+.quest-step-h1 { font-size: 2.5rem; font-weight: 900; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 1rem; }
+.quest-step-sub { font-family: 'Newsreader', serif; font-size: 1.1rem; color: var(--on-surface-variant); line-height: 1.6; margin-bottom: 2.5rem; }
+
+.form-field { margin-bottom: 2.5rem; }
+.form-label { display: block; margin-bottom: 0.6rem; color: var(--on-surface-variant); }
+.form-input, .form-textarea, .form-select {
+  width: 100%;
+  background: var(--surface-low);
+  border: none;
+  border-bottom: 2px solid var(--outline-variant);
+  padding: 0.9rem 0;
+  font-family: 'Newsreader', serif;
+  font-size: 1.15rem;
+  color: var(--on-surface);
+  transition: border-color 0.2s;
+  outline: none;
+  appearance: none;
+}
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+  border-color: var(--primary);
+  background: transparent;
+}
+.form-input::placeholder, .form-textarea::placeholder { color: rgba(115,118,133,0.4); }
+.form-textarea { resize: none; }
+.form-hint { margin-top: 0.5rem; font-size: 0.85rem; font-family: 'Newsreader', serif; font-style: italic; color: var(--outline); }
+
+.form-actions { display: flex; justify-content: flex-end; padding-top: 2rem; }
+.btn-continue {
+  background: var(--gradient-primary);
+  color: #fff; border: none;
+  padding: 0.9rem 2.5rem;
+  font-family: 'Manrope', sans-serif; font-size: 1rem; font-weight: 700;
+  border-radius: var(--radius-md); cursor: pointer;
+  display: flex; align-items: center; gap: 0.6rem;
+  box-shadow: 0 6px 20px rgba(0,82,204,0.25);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.btn-continue:hover { transform: translateY(-1px); box-shadow: 0 10px 28px rgba(0,82,204,0.32); }
+.btn-continue .material-symbols-outlined { font-size: 1.1rem; transition: transform 0.2s; }
+.btn-continue:hover .material-symbols-outlined { transform: translateX(3px); }
+
+.quest-security { display: flex; align-items: center; gap: 2rem; margin-top: 2rem; }
+.quest-security-item { display: flex; align-items: center; gap: 0.4rem; color: var(--outline); }
+.quest-security-item .material-symbols-outlined { font-size: 0.9rem; }
+
+/* Checkbox groups */
+.checkbox-group { display: flex; flex-direction: column; gap: 0.75rem; }
+.checkbox-item {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  background: var(--surface-low);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.checkbox-item:hover { background: var(--surface-container); }
+.checkbox-item input[type="checkbox"] {
+  width: 18px; height: 18px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+.checkbox-item span { font-size: 0.9rem; font-weight: 600; }
+
+/* Multi-choice pills */
+.multi-select { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.ms-pill {
+  padding: 0.55rem 1.1rem;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--outline-variant);
+  background: transparent;
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.8rem; font-weight: 700;
+  color: var(--on-surface-variant); cursor: pointer;
+  transition: all 0.15s;
+}
+.ms-pill:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-container); }
+.ms-pill.selected { border-color: var(--primary); color: var(--primary); background: var(--primary-container); }
+
+/* Step panels */
+.quest-step { display: none; }
+.quest-step.active { display: block; }
+
+/* ═══════════════════════════════
+   PAGE 3: DASHBOARD
+═══════════════════════════════ */
+#page-dashboard { display: none; }
+#page-dashboard.active { display: flex; }
+
+.sidebar {
+  width: 260px; min-height: 100vh;
+  background: var(--surface-low);
+  padding: 1.75rem 1.25rem;
+  display: flex; flex-direction: column;
+  position: fixed; top: 0; left: 0; bottom: 0;
+  z-index: 50;
+}
+.sidebar-brand { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 2.5rem; padding: 0.25rem 0.5rem; }
+.sidebar-brand-icon {
+  width: 34px; height: 34px;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+}
+.sidebar-brand-icon .material-symbols-outlined { font-size: 1.1rem; color: #fff; font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 20; }
+.sidebar-brand-name { font-size: 1.1rem; font-weight: 900; letter-spacing: -0.025em; color: var(--on-surface); }
+.sidebar-brand-sub { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--outline); }
+
+.sidebar-nav { flex: 1; display: flex; flex-direction: column; gap: 0.25rem; }
+.sidebar-nav a {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem; font-weight: 600;
+  color: var(--on-surface-variant);
+  text-decoration: none; cursor: pointer;
+  transition: background 0.15s, color 0.15s, transform 0.15s;
+}
+.sidebar-nav a:hover { background: var(--surface-container); transform: translateX(2px); }
+.sidebar-nav a.active { background: var(--surface-lowest); color: var(--primary); font-weight: 700; box-shadow: var(--shadow-card); }
+.sidebar-nav a .material-symbols-outlined { font-size: 1.15rem; }
+
+.sidebar-new-btn {
+  width: 100%; padding: 0.85rem;
+  background: var(--gradient-primary);
+  color: #fff; border: none;
+  border-radius: var(--radius-md);
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.85rem; font-weight: 700;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0,82,204,0.2);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.sidebar-new-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,82,204,0.28); }
+.sidebar-new-btn .material-symbols-outlined { font-size: 1.1rem; }
+
+.sidebar-user {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 1rem 0.5rem;
+  border-top: 1px solid rgba(195,198,214,0.2);
+  margin-top: auto;
+}
+.sidebar-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; background: var(--surface-container); }
+.sidebar-user-name { font-size: 0.85rem; font-weight: 700; }
+.sidebar-user-plan { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--outline); }
+
+.dash-main {
+  margin-left: 260px; flex: 1;
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+}
+.dash-topbar {
+  position: sticky; top: 0; z-index: 40;
+  background: var(--topnav-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 1px 0 var(--outline-variant);
+  padding: 0 2.5rem;
+  height: 64px; display: flex; align-items: center; justify-content: space-between;
+}
+.dash-topbar-title { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.025em; }
+.dash-topbar-actions { display: flex; align-items: center; gap: 1rem; }
+.topbar-nav { display: flex; gap: 2rem; }
+.topbar-nav a { font-size: 0.85rem; font-weight: 600; color: var(--on-surface-variant); text-decoration: none; cursor: pointer; transition: color 0.2s; }
+.topbar-nav a:hover { color: var(--primary); }
+.topbar-nav a.active { color: var(--primary); font-weight: 700; border-bottom: 2px solid var(--primary); padding-bottom: 2px; }
+.icon-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: none; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--on-surface-variant);
+  transition: background 0.15s;
+}
+.icon-btn:hover { background: var(--surface-low); }
+.icon-btn .material-symbols-outlined { font-size: 1.2rem; }
+
+.dash-content { padding: 2.5rem; max-width: 1100px; }
+
+/* Bento header */
+.dash-bento { display: grid; grid-template-columns: 1fr 340px; gap: 1.25rem; margin-bottom: 3rem; }
+.health-card {
+  background: var(--surface-lowest);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+  position: relative; overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+.health-blob {
+  position: absolute; top: -40px; right: -40px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(0,82,204,0.06) 0%, transparent 70%);
+  border-radius: 50%; pointer-events: none;
+  transition: background 0.5s;
+}
+.health-card:hover .health-blob { background: radial-gradient(circle, rgba(0,82,204,0.10) 0%, transparent 70%); }
+.health-text { position: relative; z-index: 1; }
+.health-title { font-family: 'Newsreader', serif; font-size: 2rem; font-weight: 500; margin-bottom: 0.5rem; }
+.health-sub { font-size: 0.85rem; color: var(--on-surface-variant); max-width: 280px; line-height: 1.55; }
+
+.health-ring { position: relative; width: 110px; height: 110px; flex-shrink: 0; }
+.health-ring svg { transform: rotate(-90deg); }
+.health-ring-num { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 900; color: var(--primary); letter-spacing: -0.04em; }
+
+.audit-card {
+  background: var(--gradient-primary);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem;
+  color: #fff;
+  display: flex; flex-direction: column; justify-content: space-between;
+  position: relative; overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,82,204,0.25);
+}
+.audit-bg { position: absolute; inset: 0; background: radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%); pointer-events: none; }
+.audit-title { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.5rem; position: relative; z-index: 1; }
+.audit-sub { font-family: 'Newsreader', serif; font-size: 0.9rem; opacity: 0.8; line-height: 1.5; margin-bottom: 1.75rem; position: relative; z-index: 1; }
+.btn-audit {
+  background: rgba(255,255,255,0.95); color: var(--primary);
+  border: none; padding: 0.75rem 1.25rem;
+  font-family: 'Manrope', sans-serif; font-size: 0.85rem; font-weight: 700;
+  border-radius: var(--radius-md); cursor: pointer;
+  transition: background 0.15s;
+  position: relative; z-index: 1;
+}
+.btn-audit:hover { background: #fff; }
+
+/* Policies section */
+.policies-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem; }
+.policies-header-left h2 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.2rem; }
+.policies-header-left p { font-family: 'Newsreader', serif; font-style: italic; color: var(--on-surface-variant); font-size: 0.95rem; }
+.policies-header-actions { display: flex; gap: 0.5rem; }
+
+.policy-list { display: flex; flex-direction: column; gap: 0.75rem; }
+.policy-item {
+  background: var(--surface-lowest);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 2rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.2s, transform 0.15s;
+  cursor: pointer;
+}
+.policy-item:hover { box-shadow: var(--shadow-float); transform: translateY(-1px); }
+.policy-item.draft { background: var(--surface-low); border-left: 3px solid rgba(0,82,204,0.3); }
+
+.policy-item-left { display: flex; align-items: center; gap: 1.25rem; }
+.policy-icon {
+  width: 52px; height: 52px;
+  background: var(--surface-low);
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--primary);
+  transition: transform 0.2s;
+}
+.policy-item:hover .policy-icon { transform: scale(1.05); }
+.policy-icon .material-symbols-outlined { font-size: 1.5rem; font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+.policy-icon.dim { color: var(--outline); }
+.policy-icon.dim .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+.policy-name { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+.policy-meta { display: flex; align-items: center; gap: 0.75rem; }
+.status-badge {
+  display: flex; align-items: center; gap: 0.3rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+  font-size: 0.6rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
+}
+.status-badge.active { background: #e6fff5; color: #006644; }
+.status-badge.draft { background: var(--surface-container); color: var(--outline); }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; }
+.status-badge.active .status-dot { background: #006644; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+.policy-date { font-family: 'Newsreader', serif; font-style: italic; font-size: 0.8rem; color: var(--outline); }
+
+.policy-actions { display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0; }
+.btn-action {
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0.55rem 1rem;
+  background: var(--surface-low);
+  border: none; border-radius: var(--radius-md);
+  font-family: 'Manrope', sans-serif; font-size: 0.8rem; font-weight: 700;
+  color: var(--on-surface-variant); cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.btn-action:hover { background: var(--surface-container); }
+.btn-action .material-symbols-outlined { font-size: 1rem; }
+.btn-action-primary {
+  background: var(--gradient-primary); color: #fff;
+  box-shadow: 0 4px 12px rgba(0,82,204,0.2);
+}
+.btn-action-primary:hover { opacity: 0.9; }
+.btn-action-disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* ═══════════════════════════════
+   PAGE 4: POLICY EDITOR
+═══════════════════════════════ */
+#page-editor { padding-top: 64px; }
+
+.editor-toolbar {
+  position: sticky; top: 64px; z-index: 40;
+  background: var(--surface-low);
+  box-shadow: 0 1px 0 var(--outline-variant);
+  padding: 1rem 2.5rem;
+}
+.editor-toolbar-inner {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.editor-meta { display: flex; align-items: center; gap: 0.75rem; }
+.editor-meta .material-symbols-outlined { font-size: 1.2rem; color: var(--primary); }
+.editor-title { font-size: 1rem; font-weight: 700; color: var(--primary); letter-spacing: -0.01em; }
+.badge-draft { background: rgba(0,82,204,0.1); color: var(--primary); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+.editor-actions { display: flex; gap: 0.6rem; }
+.btn-editor {
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0.55rem 1rem;
+  background: var(--surface-lowest);
+  border: 1px solid rgba(195,198,214,0.25);
+  border-radius: var(--radius-md);
+  font-family: 'Manrope', sans-serif; font-size: 0.8rem; font-weight: 700;
+  color: var(--on-surface-variant); cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-editor:hover { background: var(--surface-container); }
+.btn-editor .material-symbols-outlined { font-size: 1rem; }
+.btn-editor-primary {
+  background: var(--gradient-primary); color: #fff; border-color: transparent;
+  box-shadow: 0 4px 16px rgba(0,82,204,0.2);
+}
+.btn-editor-primary:hover { opacity: 0.92; }
+
+.editor-layout {
+  max-width: 1280px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 320px; gap: 2.5rem;
+  padding: 2.5rem 2.5rem 8rem;
+}
+
+.policy-doc {
+  background: var(--surface-lowest);
+  border-radius: var(--radius-xl);
+  padding: 4rem 5rem;
+  box-shadow: var(--shadow-card);
+  border: 1px solid rgba(195,198,214,0.1);
+  min-height: 900px;
+}
+.policy-doc-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(195,198,214,0.15); }
+.policy-doc-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+.policy-doc-date { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--outline); }
+.policy-section { margin-bottom: 2.5rem; }
+.policy-section.highlighted {
+  background: rgba(0,82,204,0.04);
+  margin-left: -2rem; margin-right: -2rem;
+  padding: 1.5rem 2rem;
+  border-left: 3px solid var(--primary);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+.policy-section-h3 { font-size: 1.15rem; font-weight: 700; color: var(--primary); margin-bottom: 1rem; }
+.policy-section p {
+  font-family: 'Newsreader', serif;
+  font-size: 1.05rem; line-height: 1.8; color: var(--on-surface);
+  margin-bottom: 1rem;
+}
+.policy-section p:last-child { margin-bottom: 0; }
+.policy-footer-icon { display: flex; justify-content: center; margin-top: 4rem; opacity: 0.1; }
+.policy-footer-icon .material-symbols-outlined { font-size: 4rem; }
+
+/* Editor sidebar */
+.editor-sidebar { position: sticky; top: 140px; display: flex; flex-direction: column; gap: 1.25rem; }
+.editor-panel {
+  background: var(--surface-low);
+  border-radius: var(--radius-xl);
+  padding: 1.75rem;
+}
+.editor-panel-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; }
+.editor-panel-header .material-symbols-outlined { color: var(--primary); font-size: 1.1rem; }
+.editor-panel-title { font-size: 0.9rem; font-weight: 800; color: var(--primary); letter-spacing: -0.01em; }
+
+.quick-edit-field { margin-bottom: 1.75rem; }
+.quick-edit-label { display: block; color: var(--on-surface-variant); margin-bottom: 0.6rem; }
+.quick-edit-select {
+  width: 100%;
+  background: var(--surface-lowest);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  font-family: 'Manrope', sans-serif; font-size: 0.85rem; font-weight: 600;
+  color: var(--on-surface);
+  appearance: none; cursor: pointer;
+  box-shadow: var(--shadow-card);
+}
+.quick-edit-hint { font-size: 0.7rem; font-style: italic; color: var(--outline); margin-top: 0.4rem; font-family: 'Newsreader', serif; }
+
+.checkbox-row {
+  display: flex; flex-direction: column; gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.checkbox-row-item {
+  display: flex; align-items: center; gap: 0.7rem;
+  padding: 0.75rem;
+  background: var(--surface-lowest);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.checkbox-row-item:hover { background: var(--surface-container); }
+.checkbox-row-item input { accent-color: var(--primary); width: 15px; height: 15px; cursor: pointer; }
+.checkbox-row-item span { font-size: 0.82rem; font-weight: 600; }
+
+.jurisdiction-input-wrap { position: relative; }
+.jurisdiction-input {
+  width: 100%;
+  background: var(--surface-low);
+  border: none; border-bottom: 2px solid var(--outline-variant);
+  padding: 0.7rem 2.5rem 0.7rem 0;
+  font-family: 'Manrope', sans-serif; font-size: 0.9rem; font-weight: 700;
+  color: var(--on-surface); outline: none;
+  transition: border-color 0.2s;
+}
+.jurisdiction-input:focus { border-color: var(--primary); }
+.jurisdiction-icon { position: absolute; right: 0; top: 50%; transform: translateY(-50%); color: var(--outline); font-size: 1rem; }
+
+.btn-regenerate {
+  width: 100%; padding: 0.85rem;
+  background: var(--surface-container);
+  border: none; border-radius: var(--radius-md);
+  font-family: 'Manrope', sans-serif; font-size: 0.85rem; font-weight: 700;
+  color: var(--on-surface); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+  margin-top: 1.5rem;
+  transition: background 0.15s;
+}
+.btn-regenerate:hover { background: var(--surface-high); }
+.btn-regenerate .material-symbols-outlined { font-size: 1rem; }
+
+.legal-guide-panel {
+  background: rgba(0,82,204,0.05);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+  position: relative; overflow: hidden;
+}
+.legal-guide-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+.legal-guide-header .material-symbols-outlined { color: var(--secondary); font-size: 1.1rem; font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+.legal-guide-title { font-size: 0.9rem; font-weight: 700; }
+.legal-guide-text { font-size: 0.8rem; font-family: 'Newsreader', serif; color: var(--on-surface-variant); line-height: 1.55; }
+.legal-guide-text strong { font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
+.legal-guide-bg { position: absolute; right: -16px; bottom: -16px; font-size: 5rem; opacity: 0.04; }
+.legal-guide-bg .material-symbols-outlined { font-size: 5rem; }
+
+/* ── Animations ── */
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeInUp 0.5s ease forwards; }
+
+/* ── Responsive hints ── */
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; padding: 4rem 1.5rem; }
+  .hero-visual { display: none; }
+  .steps-grid { grid-template-columns: 1fr; }
+  .bento-grid { grid-template-columns: 1fr; grid-auto-rows: auto; }
+  .bento-1,.bento-2,.bento-3,.bento-4 { grid-column: span 1; height: auto; min-height: 200px; }
+  .editor-layout { grid-template-columns: 1fr; }
+  .policy-doc { padding: 2rem; }
+  .sidebar { display: none; }
+  .dash-main { margin-left: 0; }
+  .dash-bento { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ TOP NAV ═══════════════════ -->
+<nav class="topnav" id="topnav">
+  <div class="topnav-inner">
+    <span class="brand" onclick="showPage('landing')">Policy Pen</span>
+    <div class="nav-links">
+      <a onclick="showPage('landing')">Features</a>
+      <a onclick="showPage('landing')">Pricing</a>
+      <a onclick="showPage('landing')">Blog</a>
+    </div>
+    <div class="nav-actions">
+      <div class="theme-toggle-wrap" onclick="toggleTheme()" title="Toggle light/dark mode" role="button" aria-label="Toggle theme">
+        <span class="theme-icon theme-icon-sun">light_mode</span>
+        <span class="theme-icon theme-icon-moon">dark_mode</span>
+        <div class="theme-toggle-track"><div class="theme-toggle-thumb"></div></div>
+      </div>
+      <button class="btn-ghost" onclick="showPage('dashboard')">Log In</button>
+      <button class="btn-primary" onclick="showPage('questionnaire')">Get Started</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════ FLOATING STEPPER ═══════════════════ -->
+<nav class="floating-stepper" id="floating-stepper">
+  <div class="step-pill active" id="step1-pill" onclick="goToStep(1)">
+    <span class="material-symbols-outlined">business</span>
+    Step 1: Entity
+  </div>
+  <div class="step-pill" id="step2-pill" onclick="goToStep(2)">
+    <span class="material-symbols-outlined">storage</span>
+    Step 2: Data
+  </div>
+  <div class="step-pill" id="step3-pill" onclick="goToStep(3)">
+    <span class="material-symbols-outlined">gavel</span>
+    Step 3: Rights
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE 1: LANDING
+═══════════════════════════════════════════════ -->
+<div id="page-landing" class="page active">
+
+  <section style="padding-top:64px;">
+    <div class="hero">
+      <!-- Left -->
+      <div class="fade-in">
+        <div class="hero-eyebrow">
+          <span class="material-symbols-outlined">verified</span>
+          Legally-Structured Architecture
+        </div>
+        <h1 class="hero-h1">
+          Professional Legal Policies in <em>2 Minutes</em>
+        </h1>
+        <p class="hero-sub">
+          AI-powered, jurisdiction-aware documents for SaaS and indie makers. Navigate global compliance without the billable hours.
+        </p>
+        <div class="hero-ctas">
+          <button class="btn-primary-lg" onclick="showPage('questionnaire')">Generate My Policies</button>
+          <button class="btn-text-lg">
+            <span class="material-symbols-outlined">play_circle</span>
+            See how it works
+          </button>
+        </div>
+      </div>
+
+      <!-- Right -->
+      <div class="hero-visual">
+        <div class="hero-bg-blob"></div>
+        <div class="hero-card">
+          <div class="hero-card-dots">
+            <span style="background:#ffd6d6;"></span>
+            <span style="background:#deebff;"></span>
+            <span style="background:#e1e2ec;"></span>
+          </div>
+          <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--outline);margin-bottom:1.25rem;">Document Preview</div>
+          <div class="hero-card-lines">
+            <div class="hero-card-line" style="width:70%;"></div>
+            <div class="hero-card-line" style="width:100%;"></div>
+            <div class="hero-card-line" style="width:88%;"></div>
+          </div>
+          <div class="hero-card-text">
+            "The company PolicyPen shall ensure all data processing activities align with GDPR Article 6(1)(f) regarding legitimate interests..."
+          </div>
+          <div class="hero-card-lines">
+            <div class="hero-card-line" style="width:60%;"></div>
+            <div class="hero-card-line" style="width:90%;"></div>
+          </div>
+        </div>
+        <div class="hero-badge">
+          <div class="hero-badge-icon">
+            <span class="material-symbols-outlined">gavel</span>
+          </div>
+          <div>
+            <div class="hero-badge-title">Compliance Verified</div>
+            <div class="hero-badge-sub">GDPR · CCPA · DPDP · PIPEDA</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trusted By -->
+  <div class="trusted">
+    <div class="trusted-inner">
+      <div class="trusted-label label">Trusted by 500+ startups globally</div>
+      <div class="trusted-logos">
+        <span>Vercel</span>
+        <span>Linear</span>
+        <span>Lemon Squeezy</span>
+        <span>Gumroad</span>
+        <span>Framer</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- How It Works -->
+  <div class="section">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-header">
+        <div>
+          <h2 class="section-h2">From Questionnaire to <em>Compliance</em></h2>
+          <p class="section-sub">We've distilled complex legal requirements into a seamless three-step journey.</p>
+        </div>
+        <div class="section-counter">01—03</div>
+      </div>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-icon blue">
+          <span class="material-symbols-outlined">quiz</span>
+        </div>
+        <h3 class="step-title">Questionnaire</h3>
+        <p class="step-desc">Answer 12 smart questions about your data practices. No legalese, just plain English about how your SaaS works.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-icon teal">
+          <span class="material-symbols-outlined">psychology</span>
+        </div>
+        <h3 class="step-title">AI Analysis</h3>
+        <p class="step-desc">Our engine maps your responses against current GDPR, CCPA, and global regulations to architect the perfect structure.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-icon blue">
+          <span class="material-symbols-outlined">auto_awesome</span>
+        </div>
+        <h3 class="step-title">Instant Policy</h3>
+        <p class="step-desc">Get a beautifully formatted, hosted, and auto-updating policy ready to embed in your app footer immediately.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Benefits Bento -->
+  <div class="benefits-bg">
+    <div class="section" style="padding-top:0; padding-bottom:0;">
+      <div style="text-align:center; padding: 4rem 0 3rem;">
+        <h2 class="section-h2">Engineered for <em>Indie Success</em></h2>
+        <p class="section-sub" style="margin: 0 auto;">Why world-class builders choose Policy Pen.</p>
+      </div>
+      <div class="bento-grid">
+        <div class="bento-1">
+          <div class="bento-1-bg"></div>
+          <span class="bento-1-icon material-symbols-outlined">security</span>
+          <div class="bento-1-content">
+            <span class="material-symbols-outlined">verified_user</span>
+            <h3 class="bento-h3">GDPR &amp; CCPA Compliant</h3>
+            <p class="bento-p">Our documents are architected by legal experts and verified for global compliance standards including GDPR, CCPA, India's DPDP Act 2023, PIPEDA, PDPA, POPIA, and APPI.</p>
+          </div>
+        </div>
+        <div class="bento-2">
+          <div class="bento-2-icon">
+            <span class="material-symbols-outlined">rocket_launch</span>
+          </div>
+          <div>
+            <h3 class="bento-h3" style="color:#fff;">Indie-maker Friendly</h3>
+            <p class="bento-p" style="color:rgba(255,255,255,0.75);">Priced for solo founders. Starting at $9/mo — one-time setup, zero recurring fees for base policies.</p>
+          </div>
+        </div>
+        <div class="bento-3">
+          <div class="bento-2-icon">
+            <span class="material-symbols-outlined">update</span>
+          </div>
+          <div>
+            <h3 class="bento-h3" style="color:#fff;">Forever Free Updates</h3>
+            <p class="bento-p" style="color:rgba(255,255,255,0.75);">Laws change. We update your hosted policy automatically so you stay compliant 24/7/365.</p>
+          </div>
+        </div>
+        <div class="bento-4">
+          <div style="flex:1;">
+            <h3 class="bento-h3">Export Anywhere</h3>
+            <p class="bento-p" style="color:var(--on-surface-variant);">Download in Markdown, HTML, PDF, or use our high-performance CDN to host it directly on your domain.</p>
+            <div class="format-tags">
+              <span class="format-tag">MD</span>
+              <span class="format-tag">HTML</span>
+              <span class="format-tag">PDF</span>
+              <span class="format-tag">CDN</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <div class="cta-banner">
+      <div class="cta-banner-bg"></div>
+      <h2 class="cta-h2">Ready to architect your<br/><em>legal peace of mind?</em></h2>
+      <p class="cta-sub">Join 500+ makers who've automated their legal stack in minutes.</p>
+      <button class="btn-cta" onclick="showPage('questionnaire')">Generate My Policies Now</button>
+      <p class="cta-note">No credit card required for basic setup</p>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Policy Pen</div>
+        <div class="footer-copy" style="margin-top:0.4rem;">© 2024 Policy Pen. Precision in Documentation.</div>
+      </div>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Legal Notice</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE 2: QUESTIONNAIRE
+═══════════════════════════════════════════════ -->
+<div id="page-questionnaire" class="page">
+
+  <main class="quest-main">
+    <!-- Progress -->
+    <div class="quest-progress-wrap">
+      <div class="quest-progress-header">
+        <span class="label quest-progress-label">Questionnaire Progress</span>
+        <span class="quest-progress-pct" id="progress-pct">25% Complete</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill" style="width:25%;"></div>
+      </div>
+    </div>
+
+    <!-- Card -->
+    <div class="quest-card">
+
+      <!-- Step 1: Entity -->
+      <div class="quest-step active" id="qstep-1">
+        <h1 class="quest-step-h1">Step 1: Company Information</h1>
+        <p class="quest-step-sub">The foundational details of your enterprise, used to personalize your legal documents.</p>
+        <div class="form-field">
+          <label class="label form-label" for="company_name">Company Name</label>
+          <input class="form-input" id="company_name" type="text" placeholder="e.g. Lexicon Architecture Group"/>
+          <p class="form-hint">The legal registered entity name.</p>
+        </div>
+        <div class="form-field">
+          <label class="label form-label" for="website_url">Website URL</label>
+          <input class="form-input" id="website_url" type="url" placeholder="https://www.yourcompany.com"/>
+        </div>
+        <div class="form-field">
+          <label class="label form-label" for="physical_address">Physical Address</label>
+          <textarea class="form-textarea" id="physical_address" rows="3" placeholder="123 Legal Plaza, Suite 400&#10;New York, NY 10001"></textarea>
+          <p class="form-hint">Include full street, city, state, and zip code.</p>
+        </div>
+        <div class="form-actions">
+          <button class="btn-continue" onclick="goToStep(2)">
+            Continue
+            <span class="material-symbols-outlined">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2: Data Practices -->
+      <div class="quest-step" id="qstep-2">
+        <h1 class="quest-step-h1">Step 2: Data Practices</h1>
+        <p class="quest-step-sub">Tell us what data your product collects. This determines which regulatory clauses apply.</p>
+        <div class="form-field">
+          <label class="label form-label">What data do you collect?</label>
+          <div class="checkbox-group">
+            <label class="checkbox-item">
+              <input type="checkbox" checked/> <span>Email addresses &amp; account data</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" checked/> <span>Payment &amp; billing information</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox"/> <span>Device &amp; usage analytics</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox"/> <span>Location data</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox"/> <span>Health or sensitive personal data</span>
+            </label>
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="label form-label">Primary jurisdiction(s)</label>
+          <div class="multi-select" id="jurisdiction-pills">
+            <button class="ms-pill selected" onclick="togglePill(this)">🇪🇺 GDPR (EU)</button>
+            <button class="ms-pill" onclick="togglePill(this)">🇺🇸 CCPA (California)</button>
+            <button class="ms-pill selected" onclick="togglePill(this)">🇮🇳 DPDP Act (India)</button>
+            <button class="ms-pill" onclick="togglePill(this)">🇨🇦 PIPEDA (Canada)</button>
+            <button class="ms-pill" onclick="togglePill(this)">🇧🇷 LGPD (Brazil)</button>
+            <button class="ms-pill" onclick="togglePill(this)">🇸🇬 PDPA (Singapore)</button>
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="label form-label">Indian compliance specifics</label>
+          <div class="checkbox-group">
+            <label class="checkbox-item">
+              <input type="checkbox" checked/> <span>Appoint Data Protection contact / DPO</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" checked/> <span>72-hour breach notification to DPBI</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox"/> <span>Verifiable parental consent for children (DigiLocker)</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox"/> <span>Significant Data Fiduciary status (&gt;50 lakh users)</span>
+            </label>
+          </div>
+          <p class="form-hint">Full DPDP Act enforcement begins May 13, 2027. Prepare now.</p>
+        </div>
+        <div class="form-actions">
+          <button class="btn-continue" onclick="goToStep(3)">
+            Continue
+            <span class="material-symbols-outlined">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 3: Rights & Finalize -->
+      <div class="quest-step" id="qstep-3">
+        <h1 class="quest-step-h1">Step 3: User Rights</h1>
+        <p class="quest-step-sub">Which user rights does your product support? We'll generate the corresponding policy clauses automatically.</p>
+        <div class="form-field">
+          <label class="label form-label">Data subject rights you honor</label>
+          <div class="checkbox-group">
+            <label class="checkbox-item">
+              <input type="checkbox" checked/> <span>Right to Access (Art. 15 GDPR / DPDP Sec. 11)</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" checked/> <span>Right to Erasure / Deletion</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" checked/> <span>Right to Data Portability</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" checked/> <span>Right to Grievance Redressal (DPDP Sec. 13)</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" checked/> <span>Right to Nominate (DPDP Sec. 14 — death/incapacity)</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox"/> <span>Right to Opt-Out of Sale (CCPA)</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox"/> <span>Right to Restrict Processing</span>
+            </label>
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="label form-label">Which policies do you need?</label>
+          <div class="checkbox-group">
+            <label class="checkbox-item">
+              <input type="checkbox" checked/> <span>Privacy Policy</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" checked/> <span>Terms of Service</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" checked/> <span>Cookie Policy</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" checked/> <span>Refund Policy</span>
+            </label>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-continue" onclick="showPage('dashboard')" style="background: linear-gradient(135deg, #006644 0%, #008f5c 100%); box-shadow: 0 6px 20px rgba(0,102,68,0.25);">
+            <span class="material-symbols-outlined">auto_awesome</span>
+            Generate My Policies
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Security indicators -->
+    <div class="quest-security">
+      <div class="quest-security-item">
+        <span class="material-symbols-outlined">lock</span>
+        <span class="label">Secure &amp; Encrypted</span>
+      </div>
+      <div style="width:1px;height:16px;background:var(--outline-variant);opacity:0.4;"></div>
+      <div class="quest-security-item">
+        <span class="material-symbols-outlined">timer</span>
+        <span class="label">Est. 2 Minutes Total</span>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">Policy Pen</div>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Legal Notice</a>
+      </div>
+      <div class="footer-copy">© 2024 Policy Pen.</div>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE 3: DASHBOARD
+═══════════════════════════════════════════════ -->
+<div id="page-dashboard" class="page">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-icon">
+        <span class="material-symbols-outlined">edit_note</span>
+      </div>
+      <div>
+        <div class="sidebar-brand-name">Policy Pen</div>
+        <div class="sidebar-user-plan">Authoritative Architect</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="active">
+        <span class="material-symbols-outlined">dashboard</span>
+        Dashboard
+      </a>
+      <a>
+        <span class="material-symbols-outlined">description</span>
+        My Policies
+      </a>
+      <a onclick="showPage('questionnaire')">
+        <span class="material-symbols-outlined">article</span>
+        Templates
+      </a>
+      <a>
+        <span class="material-symbols-outlined">settings</span>
+        Settings
+      </a>
+    </nav>
+
+    <div style="margin-top:auto;">
+      <button class="sidebar-new-btn" onclick="showPage('questionnaire')">
+        <span class="material-symbols-outlined">add</span>
+        New Policy
+      </button>
+      <div class="sidebar-user">
+        <div style="width:38px;height:38px;border-radius:50%;background:var(--primary-container);display:flex;align-items:center;justify-content:center;color:var(--primary);font-weight:800;font-size:0.9rem;flex-shrink:0;">JA</div>
+        <div>
+          <div class="sidebar-user-name">Julian Arch</div>
+          <div class="sidebar-user-plan">Premium Plan</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="dash-topbar-title">Policy Pen</div>
+      <div class="dash-topbar-actions">
+        <nav class="topbar-nav">
+          <a class="active">Dashboard</a>
+          <a>Features</a>
+          <a>Pricing</a>
+        </nav>
+        <button class="icon-btn">
+          <span class="material-symbols-outlined">notifications</span>
+        </button>
+        <div class="theme-toggle-wrap" onclick="toggleTheme()" title="Toggle light/dark mode" role="button" aria-label="Toggle theme">
+          <span class="theme-icon theme-icon-sun">light_mode</span>
+          <span class="theme-icon theme-icon-moon">dark_mode</span>
+          <div class="theme-toggle-track"><div class="theme-toggle-thumb"></div></div>
+        </div>
+        <button class="btn-primary" onclick="showPage('questionnaire')">Get Started</button>
+      </div>
+    </header>
+
+    <div class="dash-content">
+      <!-- Bento header -->
+      <div class="dash-bento">
+        <div class="health-card">
+          <div class="health-blob"></div>
+          <div class="health-text">
+            <h3 class="health-title">Compliance Health</h3>
+            <p class="health-sub">Your overall entity status across global jurisdictions is currently stable and high-performing.</p>
+          </div>
+          <div class="health-ring">
+            <svg viewBox="0 0 110 110" width="110" height="110">
+              <circle cx="55" cy="55" r="48" fill="none" stroke="var(--surface-high)" stroke-width="7"/>
+              <circle cx="55" cy="55" r="48" fill="none" stroke="var(--primary)" stroke-width="7"
+                stroke-dasharray="301.6" stroke-dashoffset="30.2" stroke-linecap="round"/>
+            </svg>
+            <div class="health-ring-num">90%</div>
+          </div>
+        </div>
+
+        <div class="audit-card">
+          <div class="audit-bg"></div>
+          <h4 class="audit-title">AI Audit Ready</h4>
+          <p class="audit-sub">Review the latest 2024 data processing amendments and update your policies in one click.</p>
+          <button class="btn-audit">Run Global Audit</button>
+          <div style="position:relative;z-index:1;margin-top:1rem;background:rgba(255,255,255,0.12);border-radius:8px;padding:0.65rem 0.85rem;font-size:0.7rem;font-weight:700;letter-spacing:0.06em;display:flex;align-items:center;gap:0.4rem;">
+            <span>🇮🇳</span> DPDP Act 2023 detected — India clause active
+          </div>
+        </div>
+      </div>
+
+      <!-- Policies list -->
+      <div class="policies-header">
+        <div class="policies-header-left">
+          <h2>Your Active Policies</h2>
+          <p>Manage and deploy your generated legal frameworks.</p>
+        </div>
+        <div class="policies-header-actions">
+          <button class="icon-btn"><span class="material-symbols-outlined">filter_list</span></button>
+          <button class="icon-btn"><span class="material-symbols-outlined">search</span></button>
+        </div>
+      </div>
+
+      <div class="policy-list">
+        <!-- Privacy Policy -->
+        <div class="policy-item" onclick="showPage('editor')">
+          <div class="policy-item-left">
+            <div class="policy-icon">
+              <span class="material-symbols-outlined">security</span>
+            </div>
+            <div>
+              <div class="policy-name">Privacy Policy</div>
+              <div class="policy-meta">
+                <span class="status-badge active">
+                  <span class="status-dot"></span>
+                  Active
+                </span>
+                <span class="policy-date">Last updated: Oct 24, 2024</span>
+              </div>
+            </div>
+          </div>
+          <div class="policy-actions">
+            <button class="btn-action" onclick="event.stopPropagation(); showPage('editor')">
+              <span class="material-symbols-outlined">edit</span> View/Edit
+            </button>
+            <button class="btn-action" onclick="event.stopPropagation()">
+              <span class="material-symbols-outlined">link</span> Copy Link
+            </button>
+            <button class="btn-action btn-action-primary" onclick="event.stopPropagation()">
+              <span class="material-symbols-outlined">download</span> Download PDF
+            </button>
+          </div>
+        </div>
+
+        <!-- Terms of Service (draft) -->
+        <div class="policy-item draft">
+          <div class="policy-item-left">
+            <div class="policy-icon dim">
+              <span class="material-symbols-outlined">gavel</span>
+            </div>
+            <div>
+              <div class="policy-name">Terms of Service</div>
+              <div class="policy-meta">
+                <span class="status-badge draft">Draft</span>
+                <span class="policy-date">In progress... 65% complete</span>
+              </div>
+            </div>
+          </div>
+          <div class="policy-actions">
+            <button class="btn-action" onclick="showPage('questionnaire')">
+              <span class="material-symbols-outlined">play_arrow</span> Complete Policy
+            </button>
+            <button class="btn-action btn-action-disabled" disabled>
+              <span class="material-symbols-outlined">download</span> Download PDF
+            </button>
+          </div>
+        </div>
+
+        <!-- Cookie Policy -->
+        <div class="policy-item" onclick="showPage('editor')">
+          <div class="policy-item-left">
+            <div class="policy-icon">
+              <span class="material-symbols-outlined">cookie</span>
+            </div>
+            <div>
+              <div class="policy-name">Cookie Policy</div>
+              <div class="policy-meta">
+                <span class="status-badge active">
+                  <span class="status-dot"></span>
+                  Active
+                </span>
+                <span class="policy-date">Auto-syncing with website</span>
+              </div>
+            </div>
+          </div>
+          <div class="policy-actions">
+            <button class="btn-action" onclick="event.stopPropagation(); showPage('editor')">
+              <span class="material-symbols-outlined">edit</span> View/Edit
+            </button>
+            <button class="btn-action" onclick="event.stopPropagation()">
+              <span class="material-symbols-outlined">link</span> Copy Link
+            </button>
+            <button class="btn-action btn-action-primary" onclick="event.stopPropagation()">
+              <span class="material-symbols-outlined">download</span> Download PDF
+            </button>
+          </div>
+        </div>
+
+        <!-- Refund Policy -->
+        <div class="policy-item" onclick="showPage('editor')">
+          <div class="policy-item-left">
+            <div class="policy-icon">
+              <span class="material-symbols-outlined">currency_exchange</span>
+            </div>
+            <div>
+              <div class="policy-name">Refund Policy</div>
+              <div class="policy-meta">
+                <span class="status-badge active">
+                  <span class="status-dot"></span>
+                  Active
+                </span>
+                <span class="policy-date">Last updated: Nov 1, 2024</span>
+              </div>
+            </div>
+          </div>
+          <div class="policy-actions">
+            <button class="btn-action" onclick="event.stopPropagation(); showPage('editor')">
+              <span class="material-symbols-outlined">edit</span> View/Edit
+            </button>
+            <button class="btn-action" onclick="event.stopPropagation()">
+              <span class="material-symbols-outlined">link</span> Copy Link
+            </button>
+            <button class="btn-action btn-action-primary" onclick="event.stopPropagation()">
+              <span class="material-symbols-outlined">download</span> Download PDF
+            </button>
+          </div>
+        </div>
+      </div>
+    </div><!-- /dash-content -->
+
+    <footer class="footer" style="margin-top:3rem;">
+      <div class="footer-inner">
+        <div class="footer-brand">Policy Pen</div>
+        <div class="footer-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Legal Notice</a>
+        </div>
+        <div class="footer-copy">© 2024 Policy Pen.</div>
+      </div>
+    </footer>
+  </div><!-- /dash-main -->
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE 4: POLICY EDITOR
+═══════════════════════════════════════════════ -->
+<div id="page-editor" class="page">
+
+  <!-- Editor toolbar -->
+  <div class="editor-toolbar">
+    <div class="editor-toolbar-inner">
+      <div class="editor-meta">
+        <span class="material-symbols-outlined">description</span>
+        <span class="editor-title">Privacy Policy — Q4 Compliance Update</span>
+        <span class="badge-draft">Draft</span>
+      </div>
+      <div class="editor-actions">
+        <button class="btn-editor">
+          <span class="material-symbols-outlined">save</span> Save Changes
+        </button>
+        <button class="btn-editor">
+          <span class="material-symbols-outlined">file_download</span> Export
+        </button>
+        <button class="btn-editor btn-editor-primary">
+          <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">publish</span> Publish
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Layout -->
+  <div class="editor-layout">
+
+    <!-- Document -->
+    <div class="policy-doc">
+      <div class="policy-doc-header">
+        <h2 class="policy-doc-title">Privacy Policy</h2>
+        <div class="policy-doc-date">Last Updated: October 24, 2024</div>
+      </div>
+
+      <div class="policy-section">
+        <h3 class="policy-section-h3">1. Introduction</h3>
+        <p>This Privacy Policy describes how Policy Pen ("we," "us," or "our") collects, uses, and shares your personal information when you use our services. We are committed to protecting your privacy and ensuring that your personal data is handled in a safe and responsible manner consistent with applicable law.</p>
+      </div>
+
+      <div class="policy-section highlighted">
+        <h3 class="policy-section-h3">2. Data Retention Policy</h3>
+        <p>We retain your personal data only for as long as is necessary for the purposes set out in this Privacy Policy. We will retain and use your information to the extent necessary to comply with our legal obligations, resolve disputes, and enforce our legal agreements and policies.</p>
+        <p>User account data is typically stored for the duration of your active subscription and up to 24 months thereafter, unless a shorter period is requested through our "Right to Erasure" protocol.</p>
+      </div>
+
+      <div class="policy-section">
+        <h3 class="policy-section-h3">3. Third-Party Data Sharing</h3>
+        <p>We may share your information with third-party vendors, service providers, contractors, or agents who perform services for us or on our behalf and require access to such information to do that work. This includes payment processing, data analysis, email delivery, hosting services, and customer service.</p>
+        <p>We do not sell your personal data to advertisers. All third-party partners are bound by confidentiality agreements and are prohibited from using your personal data for any purpose other than providing services to us.</p>
+      </div>
+
+      <div class="policy-section">
+        <h3 class="policy-section-h3">4. Data Security</h3>
+        <p>The security of your data is important to us, but remember that no method of transmission over the Internet, or method of electronic storage, is 100% secure. While we strive to use commercially acceptable means to protect your Personal Data, we cannot guarantee its absolute security.</p>
+      </div>
+
+      <div class="policy-section">
+        <h3 class="policy-section-h3">5. Your Rights</h3>
+        <p>Depending on your location, you may have the right to access, correct, update, or request deletion of your personal information. You may also have the right to object to processing, request restriction of processing, or request portability of your personal information.</p>
+      </div>
+
+      <div class="policy-section" id="dpdp-section" style="border-left:3px solid #FF6B00; background:rgba(255,107,0,0.04); margin-left:-2rem; margin-right:-2rem; padding:1.5rem 2rem; border-radius: 0 var(--radius-md) var(--radius-md) 0;">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;">
+          <span style="font-size:1.1rem;">🇮🇳</span>
+          <h3 style="font-size:1.15rem;font-weight:700;color:#B84500;margin:0;">6. India — DPDP Act 2023 Compliance</h3>
+          <span style="background:#FFF0E6;color:#B84500;font-size:0.6rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;padding:0.15rem 0.5rem;border-radius:4px;">DPDP Rules 2025</span>
+        </div>
+        <p>For Data Principals located within the territory of India, this section applies pursuant to the Digital Personal Data Protection Act, 2023 (DPDP Act) and the DPDP Rules, 2025, notified by the Ministry of Electronics and Information Technology (MeitY) on November 13, 2025. Full operational provisions are effective from May 13, 2027.</p>
+        <p><strong>Data Fiduciary &amp; Data Processor:</strong> Policy Pen acts as a <em>Data Fiduciary</em> when determining the purposes and means of processing your personal data. Where we engage sub-processors, they act as <em>Data Processors</em> bound by contractual obligations consistent with the DPDP Act.</p>
+        <p><strong>Consent:</strong> We collect your digital personal data only upon obtaining free, specific, informed, unconditional, and unambiguous consent. You may withdraw consent at any time through your account settings. Withdrawal does not affect the lawfulness of processing before withdrawal.</p>
+        <p><strong>Rights of Data Principals:</strong> As a Data Principal under the DPDP Act, you have the right to (i) obtain a summary of personal data processed and processing activities, (ii) correction and erasure of inaccurate or incomplete data, (iii) grievance redressal, and (iv) nominate another individual to exercise rights on your behalf in the event of death or incapacity.</p>
+        <p><strong>Breach Notification:</strong> In the event of a personal data breach, we will notify both the Data Protection Board of India (DPBI) and affected Data Principals within 72 hours, regardless of the gravity or damage caused, as required under Section 8(6) of the DPDP Act.</p>
+        <p><strong>Grievance Redressal:</strong> To exercise your rights or raise a grievance, contact our designated Data Protection contact at <strong>privacy@policyphen.com</strong>. Unresolved complaints may be escalated to the Data Protection Board of India at <a href="https://dpboard.gov.in" style="color:var(--primary);">dpboard.gov.in</a>.</p>
+        <p><strong>Children's Data:</strong> We do not knowingly collect personal data of children (persons under 18 years of age) without verifiable parental or guardian consent, consistent with Section 9 of the DPDP Act and verified via DigiLocker-compatible mechanisms where applicable.</p>
+      </div>
+
+      <div class="policy-footer-icon">
+        <span class="material-symbols-outlined">gavel</span>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="editor-sidebar">
+      <div class="editor-panel">
+        <div class="editor-panel-header">
+          <span class="material-symbols-outlined">edit_note</span>
+          <span class="editor-panel-title">Quick Edits</span>
+        </div>
+
+        <div class="quick-edit-field">
+          <label class="label quick-edit-label">Data Retention Period</label>
+          <select class="quick-edit-select">
+            <option>12 Months</option>
+            <option selected>24 Months (Standard)</option>
+            <option>60 Months (Legal Compliance)</option>
+            <option>Indefinite</option>
+          </select>
+          <div class="quick-edit-hint">Affects Clause 2. Recommended for SaaS firms in the EU.</div>
+        </div>
+
+        <div class="quick-edit-field">
+          <label class="label quick-edit-label">Third-Party Sharing</label>
+          <div class="checkbox-row">
+            <label class="checkbox-row-item">
+              <input type="checkbox" checked/> <span>Cloud Hosting Partners</span>
+            </label>
+            <label class="checkbox-row-item">
+              <input type="checkbox" checked/> <span>Marketing Analytics</span>
+            </label>
+            <label class="checkbox-row-item">
+              <input type="checkbox"/> <span>Ad Networks (Disabled)</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="quick-edit-field" style="margin-bottom:0;">
+          <label class="label quick-edit-label">Active Jurisdictions</label>
+          <div style="display:flex;flex-direction:column;gap:0.4rem;margin-top:0.5rem;">
+            <label class="checkbox-row-item" style="border-left:2px solid #0052CC;">
+              <input type="checkbox" checked style="accent-color:#0052CC;"/> <span>🇪🇺 GDPR (EU)</span>
+            </label>
+            <label class="checkbox-row-item" style="border-left:2px solid #B22234;">
+              <input type="checkbox" checked style="accent-color:#B22234;"/> <span>🇺🇸 CCPA (California)</span>
+            </label>
+            <label class="checkbox-row-item" style="border-left:2px solid #FF6B00;">
+              <input type="checkbox" checked style="accent-color:#FF6B00;"/> <span>🇮🇳 DPDP Act 2023 (India)</span>
+            </label>
+            <label class="checkbox-row-item">
+              <input type="checkbox"/> <span>🇨🇦 PIPEDA (Canada)</span>
+            </label>
+          </div>
+        </div>
+
+        <button class="btn-regenerate">
+          <span class="material-symbols-outlined">refresh</span>
+          Regenerate Clauses
+        </button>
+      </div>
+
+      <div class="legal-guide-panel">
+        <div class="legal-guide-bg">
+          <span class="material-symbols-outlined">account_balance</span>
+        </div>
+        <div class="legal-guide-header">
+          <span class="material-symbols-outlined">info</span>
+          <span class="legal-guide-title">Legal Guide</span>
+        </div>
+        <div id="legal-guide-content">
+          <p class="legal-guide-text" id="guide-text-gdpr">
+            Under <strong>GDPR Article 13</strong>, you must explicitly state the identity of all data controllers. We've automatically detected 4 partners in your configuration.
+          </p>
+        </div>
+        <div style="display:flex;gap:0.4rem;margin-top:1rem;flex-wrap:wrap;">
+          <button onclick="switchGuide('gdpr')" id="guide-btn-gdpr" style="font-size:0.65rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:0.25rem 0.6rem;border-radius:4px;border:none;cursor:pointer;background:#deebff;color:#0052CC;font-family:'Manrope',sans-serif;">🇪🇺 GDPR</button>
+          <button onclick="switchGuide('ccpa')" id="guide-btn-ccpa" style="font-size:0.65rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:0.25rem 0.6rem;border-radius:4px;border:none;cursor:pointer;background:var(--surface-container);color:var(--outline);font-family:'Manrope',sans-serif;">🇺🇸 CCPA</button>
+          <button onclick="switchGuide('dpdp')" id="guide-btn-dpdp" style="font-size:0.65rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:0.25rem 0.6rem;border-radius:4px;border:none;cursor:pointer;background:var(--surface-container);color:var(--outline);font-family:'Manrope',sans-serif;">🇮🇳 DPDP</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /editor-layout -->
+
+  <footer class="footer" style="margin-top:0;">
+    <div class="footer-inner">
+      <div class="footer-brand">Policy Pen</div>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Legal Notice</a>
+      </div>
+      <div class="footer-copy">© 2024 Policy Pen.</div>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════════════════ JS ═══════════════════ -->
+<script>
+  // ── Page routing ──
+  const pages = ['landing','questionnaire','dashboard','editor'];
+
+  function showPage(id) {
+    pages.forEach(p => {
+      document.getElementById('page-' + p).classList.remove('active');
+    });
+    document.getElementById('page-' + id).classList.add('active');
+
+    const topnav = document.getElementById('topnav');
+    const stepper = document.getElementById('floating-stepper');
+
+    if (id === 'dashboard') {
+      topnav.style.display = 'none';
+      stepper.style.display = 'none';
+    } else if (id === 'editor') {
+      topnav.style.display = 'block';
+      stepper.style.display = 'flex';
+      updateStepperForEditor();
+    } else if (id === 'questionnaire') {
+      topnav.style.display = 'block';
+      stepper.style.display = 'flex';
+    } else {
+      topnav.style.display = 'block';
+      stepper.style.display = 'none';
+    }
+    window.scrollTo(0,0);
+  }
+
+  function updateStepperForEditor() {
+    document.querySelectorAll('.step-pill').forEach(p => p.classList.remove('active'));
+    document.getElementById('step3-pill').classList.add('active');
+  }
+
+  // ── Questionnaire steps ──
+  let currentStep = 1;
+  const totalSteps = 3;
+
+  function goToStep(n) {
+    document.querySelectorAll('.quest-step').forEach(s => s.classList.remove('active'));
+    const target = document.getElementById('qstep-' + n);
+    if (target) {
+      target.classList.add('active');
+      currentStep = n;
+      updateProgress();
+      updateStepPills(n);
+    }
+    if (!document.getElementById('page-questionnaire').classList.contains('active')) {
+      showPage('questionnaire');
+    }
+  }
+
+  function updateProgress() {
+    const pct = Math.round((currentStep / totalSteps) * 100);
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-pct').textContent = pct + '% Complete';
+  }
+
+  function updateStepPills(step) {
+    document.querySelectorAll('.step-pill').forEach((p, i) => {
+      p.classList.toggle('active', i + 1 === step);
+    });
+  }
+
+  // ── Legal Guide switcher ──
+  const guides = {
+    gdpr: `Under <strong>GDPR Article 13</strong>, you must explicitly state the identity of all data controllers. We've automatically detected 4 partners in your configuration.`,
+    ccpa: `Under <strong>CCPA Section 1798.100</strong>, California residents have the right to know what personal data is collected and to opt-out of its sale. Your policy must include a "Do Not Sell My Info" link.`,
+    dpdp: `Under <strong>India's DPDP Act 2023 (Section 8)</strong>, as a Data Fiduciary you must notify the <strong>Data Protection Board of India (DPBI)</strong> and affected Data Principals within 72 hours of any breach — regardless of damage. Full enforcement: <strong>May 13, 2027</strong>. Penalties up to ₹250 crore.`
+  };
+  const guideColors = {
+    gdpr: { bg: '#deebff', color: '#0052CC' },
+    ccpa: { bg: '#ffeaea', color: '#B22234' },
+    dpdp: { bg: '#FFF0E6', color: '#B84500' }
+  };
+
+  function switchGuide(key) {
+    document.getElementById('legal-guide-content').innerHTML = '<p class="legal-guide-text">' + guides[key] + '</p>';
+    ['gdpr','ccpa','dpdp'].forEach(k => {
+      const btn = document.getElementById('guide-btn-' + k);
+      if (btn) {
+        btn.style.background = k === key ? guideColors[k].bg : 'var(--surface-container)';
+        btn.style.color = k === key ? guideColors[k].color : 'var(--outline)';
+      }
+    });
+  }
+
+  // ── Multi-select pills ──
+  function togglePill(el) {
+    el.classList.toggle('selected');
+  }
+
+  // ── Theme toggle ──
+  function toggleTheme() {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('pp-theme', isDark ? 'dark' : 'light');
+  }
+
+  // Apply saved/system theme immediately
+  (function() {
+    const saved = localStorage.getItem('pp-theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (saved === 'dark' || (!saved && prefersDark)) {
+      document.documentElement.classList.add('dark');
+    }
+  })();
+
+  // ── Init: hide floating stepper on landing ──
+  document.getElementById('floating-stepper').style.display = 'none';
+</script>
+</body>
+</html>
