@@ -1040,7 +1040,112 @@ body {
   .dash-main { margin-left: 0; }
   .dash-bento { grid-template-columns: 1fr; }
   .nav-links { display: none; }
+  .pricing-grid { grid-template-columns: 1fr; }
 }
+
+/* ───────── TICKER ───────── */
+.ticker-wrap {
+  overflow: hidden;
+  background: var(--primary-container);
+  border-top: 1px solid rgba(0,82,204,0.08);
+  border-bottom: 1px solid rgba(0,82,204,0.08);
+  padding: 0.8rem 0;
+}
+.ticker-track {
+  display: flex; gap: 3.5rem; width: max-content;
+  animation: ticker-scroll 32s linear infinite;
+}
+.ticker-track:hover { animation-play-state: paused; }
+.ticker-item {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-size: 0.72rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--primary); white-space: nowrap;
+}
+.ticker-sep { width: 4px; height: 4px; border-radius: 50%; background: var(--primary); opacity: 0.35; flex-shrink: 0; }
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+html.dark .ticker-wrap { background: rgba(77,163,255,0.06); border-color: rgba(77,163,255,0.1); }
+
+/* ───────── PRICING ───────── */
+.pricing-section { padding: 6rem 2.5rem; }
+.pricing-inner { max-width: 1080px; margin: 0 auto; }
+.pricing-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem;
+  align-items: start;
+}
+.plan-card {
+  background: var(--surface-lowest);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-card);
+  border: 1px solid rgba(195,198,214,0.12);
+  display: flex; flex-direction: column;
+  position: relative;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.plan-card:hover { box-shadow: var(--shadow-float); transform: translateY(-4px); }
+.plan-card.featured {
+  background: var(--gradient-primary);
+  border-color: transparent;
+  box-shadow: 0 12px 40px rgba(0,82,204,0.28);
+}
+.plan-card.featured:hover { box-shadow: 0 20px 56px rgba(0,82,204,0.36); }
+.plan-badge {
+  position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  background: var(--tertiary); color: #fff;
+  font-size: 0.6rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 0.25rem 0.85rem; border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+.plan-name { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--outline); margin-bottom: 1rem; }
+.plan-card.featured .plan-name { color: rgba(255,255,255,0.6); }
+.plan-price { font-size: 3rem; font-weight: 900; letter-spacing: -0.06em; color: var(--on-surface); line-height: 1; margin-bottom: 0.5rem; }
+.plan-card.featured .plan-price { color: #fff; }
+.plan-price sup { font-size: 1.2rem; font-weight: 700; vertical-align: top; margin-top: 0.65rem; display: inline-block; }
+.plan-price sub { font-size: 0.9rem; font-weight: 600; letter-spacing: 0; }
+.plan-desc { font-family: 'Newsreader', serif; font-size: 0.9rem; color: var(--on-surface-variant); margin-bottom: 2rem; line-height: 1.6; }
+.plan-card.featured .plan-desc { color: rgba(255,255,255,0.7); }
+.plan-features { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; margin-bottom: 2rem; flex: 1; }
+.plan-features li { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; font-weight: 600; color: var(--on-surface-variant); }
+.plan-card.featured .plan-features li { color: rgba(255,255,255,0.85); }
+.plan-features li .material-symbols-outlined { font-size: 1rem; color: var(--tertiary); flex-shrink: 0; margin-top: 1px; font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20; }
+.plan-card.featured .plan-features li .material-symbols-outlined { color: rgba(255,255,255,0.65); }
+.btn-plan {
+  width: 100%; padding: 0.9rem;
+  border-radius: var(--radius-md);
+  font-family: 'Manrope', sans-serif; font-size: 0.9rem; font-weight: 700;
+  cursor: pointer; border: none;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s, border-color 0.15s;
+}
+.btn-plan-outline { background: transparent; border: 2px solid var(--outline-variant); color: var(--on-surface); }
+.btn-plan-outline:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-container); }
+.btn-plan-primary { background: #fff; color: var(--primary); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+.btn-plan-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+.btn-plan-filled { background: var(--gradient-primary); color: #fff; box-shadow: 0 4px 16px rgba(0,82,204,0.25); }
+.btn-plan-filled:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,82,204,0.32); }
+.plan-cancel-note {
+  margin-top: 1.25rem;
+  padding: 0.9rem 1rem;
+  background: rgba(25,27,35,0.04);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--outline-variant);
+  font-family: 'Newsreader', serif; font-style: italic;
+  font-size: 0.8rem; color: var(--outline); line-height: 1.6;
+}
+.plan-cancel-note strong { font-weight: 700; font-style: normal; color: var(--on-surface-variant); }
+.plan-card.featured .plan-cancel-note {
+  background: rgba(255,255,255,0.1);
+  border-left-color: rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.55);
+}
+.plan-card.featured .plan-cancel-note strong { color: rgba(255,255,255,0.8); }
+html.dark .plan-card { background: var(--surface-low); border-color: rgba(255,255,255,0.04); }
+html.dark .plan-card.featured { background: var(--gradient-primary); border-color: transparent; }
+html.dark .btn-plan-outline { border-color: rgba(255,255,255,0.1); color: var(--on-surface); }
+html.dark .btn-plan-outline:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-container); }
+html.dark .plan-cancel-note { background: rgba(255,255,255,0.04); border-left-color: rgba(255,255,255,0.1); }
 </style>
 </head>
 <body>
@@ -1051,7 +1156,7 @@ body {
     <span class="brand" onclick="showPage('landing')">Policy Pen</span>
     <div class="nav-links">
       <a onclick="showPage('landing')">Features</a>
-      <a onclick="showPage('landing')">Pricing</a>
+      <a onclick="showPage('landing'); setTimeout(()=>document.getElementById('pricing').scrollIntoView({behavior:'smooth'}),50)">Pricing</a>
       <a onclick="showPage('landing')">Blog</a>
     </div>
     <div class="nav-actions">
@@ -1096,10 +1201,10 @@ body {
           Legally-Structured Architecture
         </div>
         <h1 class="hero-h1">
-          Professional Legal Policies in <em>2 Minutes</em>
+          Your SaaS just shipped without a Privacy Policy.
         </h1>
         <p class="hero-sub">
-          AI-powered, jurisdiction-aware documents for SaaS and indie makers. Navigate global compliance without the billable hours.
+          Answer 12 questions. Get a complete, jurisdiction-aware policy suite in under 2 minutes. Update automatically when laws change.
         </p>
         <div class="hero-ctas">
           <button class="btn-primary-lg" onclick="showPage('questionnaire')">Generate My Policies</button>
@@ -1145,6 +1250,20 @@ body {
       </div>
     </div>
   </section>
+
+  <!-- Social Proof Ticker -->
+  <div class="ticker-wrap" aria-hidden="true">
+    <div class="ticker-track">
+      <span class="ticker-item">Used by 400+ indie founders, no-coders, and agencies</span><span class="ticker-sep"></span>
+      <span class="ticker-item">Auto-updating policies across GDPR · CCPA · DPDP · PIPEDA</span><span class="ticker-sep"></span>
+      <span class="ticker-item">Used by 400+ indie founders, no-coders, and agencies</span><span class="ticker-sep"></span>
+      <span class="ticker-item">Auto-updating policies across GDPR · CCPA · DPDP · PIPEDA</span><span class="ticker-sep"></span>
+      <span class="ticker-item">Used by 400+ indie founders, no-coders, and agencies</span><span class="ticker-sep"></span>
+      <span class="ticker-item">Auto-updating policies across GDPR · CCPA · DPDP · PIPEDA</span><span class="ticker-sep"></span>
+      <span class="ticker-item">Used by 400+ indie founders, no-coders, and agencies</span><span class="ticker-sep"></span>
+      <span class="ticker-item">Auto-updating policies across GDPR · CCPA · DPDP · PIPEDA</span><span class="ticker-sep"></span>
+    </div>
+  </div>
 
   <!-- Trusted By -->
   <div class="trusted">
@@ -1243,6 +1362,70 @@ body {
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pricing -->
+  <div class="pricing-section" id="pricing">
+    <div class="pricing-inner">
+      <div style="text-align:center;">
+        <h2 class="section-h2">Simple, <em>Transparent</em> Pricing</h2>
+        <p class="section-sub" style="margin: 0.75rem auto 0;">One price. Every jurisdiction. No surprise legal bills.</p>
+      </div>
+      <div class="pricing-grid">
+
+        <!-- Starter -->
+        <div class="plan-card">
+          <div class="plan-name">Starter</div>
+          <div class="plan-price"><sup>$</sup>0</div>
+          <p class="plan-desc">For solo makers shipping their first product and testing the waters.</p>
+          <ul class="plan-features">
+            <li><span class="material-symbols-outlined">check_circle</span> 1 hosted policy</li>
+            <li><span class="material-symbols-outlined">check_circle</span> Privacy Policy template</li>
+            <li><span class="material-symbols-outlined">check_circle</span> GDPR-ready clauses</li>
+            <li><span class="material-symbols-outlined">check_circle</span> Policy Pen branding</li>
+          </ul>
+          <button class="btn-plan btn-plan-outline" onclick="showPage('questionnaire')">Get Started Free</button>
+        </div>
+
+        <!-- Pro -->
+        <div class="plan-card featured">
+          <div class="plan-badge">Most Popular</div>
+          <div class="plan-name">Pro</div>
+          <div class="plan-price"><sup>$</sup>12<sub>/mo</sub></div>
+          <p class="plan-desc">For growing SaaS products that operate across multiple jurisdictions.</p>
+          <ul class="plan-features">
+            <li><span class="material-symbols-outlined">check_circle</span> 4 hosted policies</li>
+            <li><span class="material-symbols-outlined">check_circle</span> GDPR, CCPA, DPDP, PIPEDA</li>
+            <li><span class="material-symbols-outlined">check_circle</span> Auto-updates when laws change</li>
+            <li><span class="material-symbols-outlined">check_circle</span> Custom domain hosting</li>
+            <li><span class="material-symbols-outlined">check_circle</span> Remove Policy Pen branding</li>
+          </ul>
+          <button class="btn-plan btn-plan-primary" onclick="showPage('questionnaire')">Start Free Trial</button>
+          <div class="plan-cancel-note">
+            <strong>If you cancel,</strong> your hosted policies remain live for 30 days. After that, auto-updates stop and you'll need to manage policy updates manually.
+          </div>
+        </div>
+
+        <!-- Agency -->
+        <div class="plan-card">
+          <div class="plan-name">Agency</div>
+          <div class="plan-price"><sup>$</sup>39<sub>/mo</sub></div>
+          <p class="plan-desc">For agencies and no-code studios managing compliance across multiple client products.</p>
+          <ul class="plan-features">
+            <li><span class="material-symbols-outlined">check_circle</span> Unlimited policies</li>
+            <li><span class="material-symbols-outlined">check_circle</span> All jurisdictions + APPI, LGPD</li>
+            <li><span class="material-symbols-outlined">check_circle</span> White-label &amp; client portals</li>
+            <li><span class="material-symbols-outlined">check_circle</span> API access</li>
+            <li><span class="material-symbols-outlined">check_circle</span> Priority support</li>
+          </ul>
+          <button class="btn-plan btn-plan-filled" onclick="showPage('questionnaire')">Start Free Trial</button>
+          <div class="plan-cancel-note">
+            <strong>If you cancel,</strong> your hosted policies remain live for 30 days. After that, auto-updates stop and you'll need to manage policy updates manually.
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
