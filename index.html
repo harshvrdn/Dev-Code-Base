@@ -213,7 +213,8 @@ body {
 
 /* ───────── PAGES ───────── */
 .page { display: none; min-height: 100vh; }
-.page.active { display: block; }
+.page.active { display: block; animation: pageFadeIn 0.18s ease forwards; }
+@keyframes pageFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 /* ───────── NAV ───────── */
 .topnav {
@@ -222,6 +223,8 @@ body {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   box-shadow: var(--shadow-float);
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 .topnav-inner {
   display: grid;
@@ -235,7 +238,7 @@ body {
 .nav-links { display: flex; gap: 2.5rem; justify-self: center; }
 .nav-links a { font-size: 0.85rem; font-weight: 600; color: var(--on-surface-variant); text-decoration: none; transition: color 0.2s; cursor: pointer; white-space: nowrap; }
 .nav-links a:hover { color: var(--primary); }
-.nav-actions { justify-self: end; display: flex; gap: 0.75rem; align-items: center; }
+.nav-actions { justify-self: end; display: flex; gap: 0.75rem; align-items: center; isolation: isolate; }
 .btn-ghost { background: none; border: none; padding: 0.5rem 1rem; font-family: 'Manrope', sans-serif; font-size: 0.85rem; font-weight: 600; color: var(--on-surface-variant); cursor: pointer; border-radius: var(--radius-md); transition: background 0.2s; }
 .btn-ghost:hover { background: var(--surface-low); }
 .btn-primary {
@@ -1041,6 +1044,11 @@ body {
   .dash-bento { grid-template-columns: 1fr; }
   .nav-links { display: none; }
   .pricing-grid { grid-template-columns: 1fr; }
+  .topnav-inner { grid-template-columns: 1fr auto; }
+}
+@media (max-width: 480px) {
+  .btn-ghost { display: none; }
+  .topnav-inner { padding: 0 1rem; }
 }
 
 /* ───────── TICKER ───────── */
