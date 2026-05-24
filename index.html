@@ -1165,7 +1165,7 @@ html.dark .plan-cancel-note { background: rgba(255,255,255,0.04); border-left-co
         <span class="theme-icon theme-icon-moon">dark_mode</span>
         <div class="theme-toggle-track"><div class="theme-toggle-thumb"></div></div>
       </div>
-      <button class="btn-ghost" onclick="showPage('dashboard')">Log In</button>
+      <button class="btn-ghost" onclick="handleLogin()">Log In</button>
       <button class="btn-primary" onclick="showPage('questionnaire')">Get Started</button>
     </div>
   </div>
@@ -1611,7 +1611,7 @@ html.dark .plan-cancel-note { background: rgba(255,255,255,0.04); border-left-co
           </div>
         </div>
         <div class="form-actions">
-          <button class="btn-continue" onclick="showPage('dashboard')" style="background: linear-gradient(135deg, #006644 0%, #008f5c 100%); box-shadow: 0 6px 20px rgba(0,102,68,0.25);">
+          <button class="btn-continue" onclick="completeOnboarding()" style="background: linear-gradient(135deg, #006644 0%, #008f5c 100%); box-shadow: 0 6px 20px rgba(0,102,68,0.25);">
             <span class="material-symbols-outlined">auto_awesome</span>
             Generate My Policies
           </button>
@@ -2075,6 +2075,16 @@ html.dark .plan-cancel-note { background: rgba(255,255,255,0.04); border-left-co
 <script>
   // ── Page routing ──
   const pages = ['landing','questionnaire','dashboard','editor'];
+
+  function handleLogin() {
+    const onboarded = localStorage.getItem('pp-onboarded');
+    showPage(onboarded ? 'dashboard' : 'questionnaire');
+  }
+
+  function completeOnboarding() {
+    localStorage.setItem('pp-onboarded', '1');
+    showPage('dashboard');
+  }
 
   function showPage(id) {
     pages.forEach(p => {
